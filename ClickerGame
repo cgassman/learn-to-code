@@ -1,0 +1,120 @@
+import tkinter as tk
+import time
+
+root = tk.Tk()
+
+class Entscheider():
+
+    def __init__(self):
+        self.Quickplay_Button = tk.Button(text= "Quickplay", width=20, height=5, command=self.play_quickplay)
+        self.Quickplay_Button.grid(row=0, column=0)
+        self.Competitiv_Button = tk.Button(text= "Competitiv", width=20, height=5, command=self.play_competitiv)
+        self.Competitiv_Button.grid(row=0, column=1)
+
+    def play_competitiv(self):
+        clickerGame = Kompetitiv()
+
+    def play_quickplay(self):
+        qpGame = Quickplay()
+
+
+class Kompetitiv:
+
+    def __init__(self):
+        self.remaining_time = 10
+        self.click_force = 1
+        self.clicks = 0
+        self.bf = 0
+        self.the_button = tk.Button(text="Click the Button!", width=20, height=5,
+                                    command=lambda: self.increment(self.clicks))
+        self.the_button.grid(row=0, column=0)
+        self.the_aimbot = tk.Button(text="Bot Current: 0", width=20, height=5,
+                                    command=lambda: self.Bot(self.bf, self.clicks))
+        self.the_aimbot.grid(row=1, column=0)
+        self.clicker_update = tk.Button(text="Clicker Upgrade: %d" % self.click_force, width=20, height=5,
+                                        command=self.clickerUpgrade)
+        self.clicker_update.grid(row=0, column=1)
+
+    def Bot(self, bf, clicks):
+        if self.clicks >= 15:
+            self.clicks = self.clicks - 15
+            self.bf = self.bf + 1
+
+        while self.remaining_time > 0:
+            self.remaining_time = self.remaining_time - 1
+            time.sleep(1)
+            self.clicks = self.clicks + self.bf
+
+    def increment(self, clicks):
+        self.clicks = self.clicks + self.click_force
+        self.Current_clicks = tk.Label(text="Du hast %d" % self.clicks)
+        self.Current_clicks.grid(row=1, column=1)
+
+    def clickerUpgrade(self):
+        if self.clicks >= 15:
+            self.clicks = self.clicks - 15
+            self.click_force = self.click_force + 1
+
+
+class Quickplay():
+
+    def __init__(self):
+        self.clicks = 0
+        self.highest_clicks = 0
+        self.the_button = tk.Button(text="Click the Button !", width=20, height=5, command=self.increment)
+        self.the_button.grid(row=0, column=0)
+        self.current_click_label = tk.Label(text="You have %d" % self.clicks)
+        self.current_click_label.grid(row=0, column=1)
+        self.reset_button = tk.Button(text="Reset", width=20, height=5, command=self.restart)
+        self.reset_button.grid(row=1, column=0)
+        self.remaining = 0
+        self.timer_label = tk.Label(text="", width=10)
+        self.timer_label.grid(row=1, column=1)
+        self.countdown(10)
+
+
+    def increment(self):
+        """
+        for each click on the button the click counter will be increased by 1.
+        :return:
+        """
+        self.clicks = self.clicks + 1
+        self.current_click_label = tk.Label(text="You have %d" % self.clicks)
+        self.current_click_label.grid(row=0, column=1)
+
+    def restart(self):
+        """
+        resets the click counter to 0 and starts a new game
+        :return:
+        """
+        self.clicks = 0
+        self.current_click_label = tk.Label(text="You have %d" % self.clicks)
+        self.current_click_label.grid(row=0, column=1)
+        newQuickplayGame = Quickplay()
+
+    def countdown(self, remaining):
+        """
+        countdown to 0. Every second the timer is reduced by 1. Game will be ended if countdown reached 0.
+        :param remaining: seconds that will be counted down.
+        :return:
+        """
+        if remaining is not None:
+            self.remaining = remaining
+        if remaining <= 0:
+            self.timer_label.configure(text="time's up!")
+            self.endGame()
+        else:
+            self.timer_label.configure(text="%d" % remaining)
+            self.remaining = remaining - 1
+            root.after(1000, self.countdown, self.remaining)
+
+    def endGame(self):
+        """
+        ends the game. Displays achieved score.
+        :return:
+        """
+        self.the_button = tk.Button(text="Your score: %d" % self.clicks, width=20, height=5)
+        self.the_button.grid(row=0, column=0)
+
+app = Entscheider()
+root.mainloop()
