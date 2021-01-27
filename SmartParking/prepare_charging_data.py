@@ -1,6 +1,8 @@
 # --- all relevant imports ---
 import pandas as pd
 
+# TODO possibly split date and time from datetime object.
+# TODO limit duration to to decimals
 
 def read_data():
     orig_data = pd.read_excel(r'data\KOPIE_Auswertung_Ladestationen_SmartParking.xlsx',

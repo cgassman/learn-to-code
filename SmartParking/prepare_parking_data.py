@@ -1,12 +1,13 @@
 # --- all relevant imports ---
 import pandas as pd
 
+# TODO possibly split date and time after having created start and stopevents
+# TODO limit duration to to decimals
 
 # --- read in data of files ---
 def read_data():
     orig_parking_data = pd.read_excel(r'data\KOPIE_Auswertung_Ladestationen_SmartParking.xlsx',
                                       sheet_name='Sensordaten Roh')
-
     return orig_parking_data
 
 
